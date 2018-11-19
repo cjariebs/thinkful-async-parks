@@ -1,11 +1,13 @@
 'use strict';
 
-function getParks(state, maxResults=10) {
-    let uri = `https://api.nps.gov/api/v1/parks/`;
-    
-    uri = uri + `?stateCode=${state}&limit=${maxResults-1}`;
-    console.log(uri);
+const _stateCodes = [];
 
+function getParks(maxResults=10) {
+    const url = `https://api.nps.gov/api/v1/parks/`;
+    const params = formatParams(maxResults);
+    const uri = url + params;
+    
+    console.log(uri);
     return fetch(uri)
 	.then(response => {
 	    if (response.ok) {
@@ -13,6 +15,14 @@ function getParks(state, maxResults=10) {
 	    }
 	    throw new Error(response.statusText);
 	});
+}
+
+function formatParams(maxResults=10) {
+    let paramString = `?limit=${encodeURIComponent(maxResults)}&`;
+    for (let i=0; i < _stateCodes.length; i++) {
+	paramString += `stateCode=${encodeURIComponent(_stateCodes[i])}&`;
+    }
+    return paramString;
 }
 
 function updateSearchResults(resultJson) {
@@ -33,18 +43,52 @@ function updateSearchResults(resultJson) {
     }
 }
 
+function addStateCode(state) {
+    _stateCodes.push(state);
+    updateStateList();
+}
+
+function handleInputs() {
+    handleSearchForm();
+    handleAddStateButton();
+}
+
 function handleSearchForm() {
     $('form').submit(event => {
 	event.preventDefault();
 
-	const state = $('input[name="state"]').val();
-	const maxResults = $('input[name="maxResults"]').val();
+	const ele = $('input[name="state"]');
+	if (ele.val() != "") {
+	    addStateCode(ele.val());
+	    ele.val('');
+	    return;
+	}
 
-	getParks(state, maxResults)
+	const maxResults = $('input[name="maxResults"]').val();
+	if (!maxResults) maxResults = 10;
+
+	getParks(maxResults)
 	.then(result => {
 	    updateSearchResults(result);
 	});
     });
 }
 
-$(handleSearchForm());
+function handleAddStateButton() {
+    $('button[name="addState"]').click(event => {
+	console.log("addState");
+	const ele = $('input[name="state"]');
+	addStateCode(ele.val());
+	ele.val('');
+    });
+}
+
+function updateStateList() {
+    const ele = $('.stateList');
+    ele.html('');
+    for (let i=0; i < _stateCodes.length; i++) {
+	ele.append(`<li>${_stateCodes[i]}</li>`);
+    }
+}
+
+$(handleInputs());

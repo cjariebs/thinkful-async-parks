@@ -11,18 +11,18 @@
 	</header>
 	<main role="main">
 	    <form>
-		<legend>Search for National Parks</legend>
 		<fieldset>
+		<legend>Search for National Parks</legend>
 		<label for="state">State:</label>
-		<!--<select name="state">
-		</select>-->
-		<input type="text" name="state" />
+	   	<input type="text" name="state" />
+		<button name="addState" type="button">Add</button>
 		<label for="maxResults">Max results:</label>
 		<input type="num" name="maxResults" />
 		<input type="submit" value="Search" />
 		</fieldset>
 	    </form>
 	    <section>
+		<ul class="stateList"></ul>
 		<ol class="results"></ol>
 	    </section>
 	</main>
