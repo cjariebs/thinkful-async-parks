@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+	<title>National Park Search</title>
+	<meta name="description" content="National Park Search" />
+	<meta charset="utf8" />
+    </head>
+    <body>
+	<header role="banner">
+	    <h1>National Park Search</h1>
+	</header>
+	<main role="main">
+	    <form>
+		<legend>Search for National Parks</legend>
+		<fieldset>
+		<label for="state">State:</label>
+		<!--<select name="state">
+		</select>-->
+		<input type="text" name="state" />
+		<label for="maxResults">Max results:</label>
+		<input type="num" name="maxResults" />
+		<input type="submit" value="Search" />
+		</fieldset>
+	    </form>
+	    <section>
+		<ol class="results"></ol>
+	    </section>
+	</main>
+    </body>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="apiKey.js"></script>
+    <script type="text/javascript" src="index.js"></script>
+</html>
